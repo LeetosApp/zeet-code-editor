@@ -11,16 +11,14 @@ app.use(bodyParser.text());
 app.post("/runcpp", (req, res) => {
   const cppCode = req.body;
 
-  // Docker command to compile and execute C++ code
+  // Command to compile and execute C++ code
   const command = `
-    docker run --rm -i \
-    -v $(pwd):/usr/src/app \
-    -w /usr/src/app \
-    gcc:latest \
-    sh -c "echo '${cppCode}' > main.cpp && g++ -o main main.cpp && ./main"
+    echo '${cppCode}' > main.cpp && \
+    g++ -o main main.cpp && \
+    ./main
   `;
 
-  // Execute the Docker command
+  // Execute the command
   exec(command, (error, stdout, stderr) => {
     if (error) {
       res.status(500).send(stderr);
